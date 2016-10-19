@@ -5,7 +5,7 @@
 
 server {
   server_name default;
-  root        /var/www/default;
+  root        /var/www;
   index       index.php;
 
   client_max_body_size 100M;

@@ -29,6 +29,10 @@ RUN apt-get update && apt-get install -my \
     php5-json \
     php-apc
 
+# Enable mail sending
+# RUN apt-get update && apt-get install -my git golang-go
+# RUN mkdir /opt/go && export GOPATH=/opt/go && go get github.com/mailhog/mhsendmail
+
 # Ensure that PHP5 FPM is run as root.
 RUN sed -i "s/user = www-data/user = root/" /etc/php5/fpm/pool.d/www.conf
 RUN sed -i "s/group = www-data/group = root/" /etc/php5/fpm/pool.d/www.conf
