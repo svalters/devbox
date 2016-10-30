@@ -1,2 +1,2 @@
-# devbox_php
+# devboxp
 Dockerized PHP development stack

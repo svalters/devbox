@@ -4,42 +4,49 @@
 # ------------------------------------------------------------------------------
 
 web:
-  build: .
+  build: ./image/nginx
+  restart: always
   ports:
     - "80:80"
     - "443:443"
     - "9000:9000"
   links:
-    - mysql:mysql
-    - memcached:memcached
-    - redis:redis
-    - mailhog:mailhog
+    - php:php
   volumes:
-    - ./www:/var/www
-    - ./sites:/etc/nginx/conf.d
-    - ./logs:/var/log/supervisor
+    - ./project:/project
+    - ./image/nginx/sites:/etc/nginx/conf.d
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> 2. Mysql [[
+# -> 2.PHP [[
+# ------------------------------------------------------------------------------
+
+php:
+  build: ./image/php/5.6
+  links:
+    - mysql:mysql
+    - mailhog:mailhog
+    - redis:redis
+  volumes:
+    - ./project:/project
+    - ./log/php-fpm:/var/log/php-fpm¬
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 3. Mysql [[
 # ------------------------------------------------------------------------------
 
 mysql:
-  image: mysql
+  build: ./image/mysql
+  restart: always
   ports:
     - "3306:3306"
+  volumes:
+    - /var/lib/mysql
   environment:
     MYSQL_ROOT_PASSWORD: 123
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> 3. Memcached [[
-# ------------------------------------------------------------------------------
-
-memcached:
-  image: memcached
-  ports:
-    - "11211:11211"
+    MYSQL_USER: dbuser
+    MYSQL_PASSWORD: 123
 
 # ]]
 # ------------------------------------------------------------------------------
