@@ -1,35 +1,36 @@
 # vim: set foldmarker=[[,]] foldlevel=0 foldmethod=marker spell:
 # ------------------------------------------------------------------------------
-# -> 1. Web [[
-# ------------------------------------------------------------------------------
-
-web:
-  build: ./image/nginx
-  restart: always
-  ports:
-    - "80:80"
-    - "443:443"
-    - "9000:9000"
-  links:
-    - php:php
-  volumes:
-    - ./project:/project
-    - ./image/nginx/sites:/etc/nginx/conf.d
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> 2.PHP [[
+# -> 1.PHP [[
 # ------------------------------------------------------------------------------
 
 php:
   build: ./image/php/5.6
+  container_name: php
   links:
-    - mysql:mysql
-    - mailhog:mailhog
-    - redis:redis
+    - mysql
+    - mailhog
+    - redis
   volumes:
-    - ./project:/project
-    - ./log/php-fpm:/var/log/php-fpm¬
+    - ./project:/var/www/project
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 2. Nginx [[
+# ------------------------------------------------------------------------------
+
+nginx:
+  build: ./image/nginx
+  container_name: nginx
+  volumes_from:
+    - php
+  volumes:
+    - ./image/nginx/sites:/etc/nginx/conf.d
+  links:
+    - php
+  ports:
+    - 80:80
+    - 443:443
+    - 9000:9000
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -38,11 +39,9 @@ php:
 
 mysql:
   build: ./image/mysql
-  restart: always
+  container_name: mysql
   ports:
-    - "3306:3306"
-  volumes:
-    - /var/lib/mysql
+    - 3306:3306
   environment:
     MYSQL_ROOT_PASSWORD: 123
     MYSQL_USER: dbuser
@@ -55,8 +54,9 @@ mysql:
 
 redis:
   image: redis
+  container_name: redis
   ports:
-    - "6379:6379"
+    - 6379:6379
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -65,8 +65,9 @@ redis:
 
 mailhog:
   image: mailhog/mailhog
+  container_name: mailhog
   ports:
-    - "8025:8025"
+    - 8025:8025
 
 # ]]
 # ------------------------------------------------------------------------------
