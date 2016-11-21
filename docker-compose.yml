@@ -1,15 +1,16 @@
 # vim: set foldmarker=[[,]] foldlevel=0 foldmethod=marker spell:
 # ------------------------------------------------------------------------------
-# -> 1.PHP [[
+# -> 1. PHP [[
 # ------------------------------------------------------------------------------
 
 php:
   build: ./image/php/5.6
-  container_name: php
+  container_name: php-5.6
   links:
     - mysql
-    - mailhog
-    - redis
+    # - mailhog
+    # - redis
+    # - memcached
   volumes:
     - ./project:/var/www/project
 
@@ -52,22 +53,33 @@ mysql:
 # -> 4. Redis [[
 # ------------------------------------------------------------------------------
 
-redis:
-  image: redis
-  container_name: redis
-  ports:
-    - 6379:6379
+# redis:
+#   image: redis:alpine
+#   container_name: redis
+#   ports:
+#     - 6379:6379
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> 5. Mailhog [[
+# -> 5. Memcached [[
 # ------------------------------------------------------------------------------
 
-mailhog:
-  image: mailhog/mailhog
-  container_name: mailhog
-  ports:
-    - 8025:8025
+# memcached:
+#   image: memcached:alpine
+#   container_name: memcached
+#   ports:
+#     - 11211:11211
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 6. Mailhog [[
+# ------------------------------------------------------------------------------
+
+# mailhog:
+#   image: mailhog/mailhog
+#   container_name: mailhog
+#   ports:
+#     - 8025:8025
 
 # ]]
 # ------------------------------------------------------------------------------

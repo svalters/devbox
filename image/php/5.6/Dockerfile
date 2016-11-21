@@ -1,33 +1,30 @@
-# vim: set foldmarker=, foldlevel=0 foldmethod=marker spell:
+# vim: set foldmarker=[[,]] foldlevel=0 foldmethod=marker spell:
 # ------------------------------------------------------------------------------
 # -> 1. Base image [[
 # ------------------------------------------------------------------------------
 
-FROM php:5.6-fpm
+FROM php:5.6-fpm-alpine
 
 # ]]
 # ------------------------------------------------------------------------------
 # -> 2. Install base packages [[
 # ------------------------------------------------------------------------------
 
-RUN apt-get update && apt-get install -qy \
-    mysql-client \
-    memcached \
-    mysql-client \
-    curl \
+RUN apk add --no-cache \
     wget \
-    libcurl4-gnutls-dev \
-    libmcrypt-dev \
-    libpng12-dev \
+    ssmtp \
+    autoconf \
+    build-base \
     libxml2-dev \
-    libxslt-dev
+    libmcrypt-dev
 
 # ]]
 # ------------------------------------------------------------------------------
 # -> 3. Install PHP extensions [[
 # ------------------------------------------------------------------------------
 
-RUN apt-get update && docker-php-ext-install curl \
+RUN docker-php-ext-install \
+    curl \
     gd \
     mbstring \
     mysqli \
@@ -45,20 +42,14 @@ RUN apt-get update && docker-php-ext-install curl \
 # -> 4. Install Xdebug [[
 # ------------------------------------------------------------------------------
 
-RUN yes | pecl install xdebug
+ENV XDEBUG_VERSION 2.3.3
+RUN wget http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \
+    && tar -zxvf xdebug-$XDEBUG_VERSION.tgz && cd xdebug-$XDEBUG_VERSION \
+    && phpize && ./configure --enable-xdebug && make && make install
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> 5. Composer [[
-# ------------------------------------------------------------------------------
-
-RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer
-RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer \
-    && rm -rf /tmp/composer-setup.php
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> 6. Magerun [[
+# -> 5. Magerun [[
 # ------------------------------------------------------------------------------
 
 RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar && \
@@ -67,10 +58,11 @@ RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> 7. Configure [[
+# -> 6. Configure [[
 # ------------------------------------------------------------------------------
 
 COPY php.ini /usr/local/etc/php/php.ini
+COPY ssmtp.conf /etc/ssmtp/ssmtp.conf
 
 # ]]
 # ------------------------------------------------------------------------------
