@@ -42,7 +42,7 @@ RUN docker-php-ext-install \
 # -> 4. Install Xdebug [[
 # ------------------------------------------------------------------------------
 
-ENV XDEBUG_VERSION 2.3.3
+ENV XDEBUG_VERSION 2.4.1
 RUN wget http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \
     && tar -zxvf xdebug-$XDEBUG_VERSION.tgz && cd xdebug-$XDEBUG_VERSION \
     && phpize && ./configure --enable-xdebug && make && make install
@@ -52,17 +52,17 @@ RUN wget http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \
 # -> 5. Magerun [[
 # ------------------------------------------------------------------------------
 
-RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar && \
-    chmod +x ./magerun && \
-    mv ./magerun /usr/local/bin/
+RUN curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar \
+    && chmod +x ./magerun \
+    && mv ./magerun /usr/local/bin/
 
 # ]]
 # ------------------------------------------------------------------------------
 # -> 6. Configure [[
 # ------------------------------------------------------------------------------
 
-COPY php.ini /usr/local/etc/php/php.ini
-COPY ssmtp.conf /etc/ssmtp/ssmtp.conf
+COPY config/php.ini /usr/local/etc/php/php.ini
+COPY config/ssmtp.conf /etc/ssmtp/ssmtp.conf
 
 # ]]
 # ------------------------------------------------------------------------------

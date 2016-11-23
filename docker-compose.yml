@@ -24,14 +24,11 @@ nginx:
   container_name: nginx
   volumes_from:
     - php
-  volumes:
-    - ./image/nginx/sites:/etc/nginx/conf.d
   links:
     - php
   ports:
     - 80:80
     - 443:443
-    - 9000:9000
 
 # ]]
 # ------------------------------------------------------------------------------
