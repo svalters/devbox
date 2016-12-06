@@ -10,6 +10,7 @@ FROM nginx:alpine
 # -> 2. Configure [[
 # ------------------------------------------------------------------------------
 
+COPY ssl /etc/nginx/ssl
 COPY sites /etc/nginx/conf.d
 
 # ]]
