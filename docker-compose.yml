@@ -27,9 +27,9 @@ services:
       - mysql
       # - mongo
       # - mongoclient
-      # - mailhog
       # - redis
       # - memcached
+      # - mailhog
     volumes:
       - ./project:/var/www/project
 
