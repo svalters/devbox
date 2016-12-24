@@ -1,0 +1,197 @@
+# vim: set foldmarker=[[,]] foldlevel=0 foldmethod=marker spell:
+# ------------------------------------------------------------------------------
+# -> 1. Base image [[
+# ------------------------------------------------------------------------------
+
+FROM php:5.6-fpm
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 2. Install base packages [[
+# ------------------------------------------------------------------------------
+
+RUN apt-get update && apt-get install -y \
+    # git \
+    # wget \
+    curl \
+    ssmtp
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 3. Install PHP extensions [[
+# ------------------------------------------------------------------------------
+
+RUN docker-php-ext-install \
+    # mysqli \
+    # mysql \
+    # opcache \
+    # mbstring \
+    # tokenizer \
+    # bcmath \
+    pdo_mysql
+
+ARG INSTALL_MCRYPT=false
+# Install: mcrypt extension [[
+RUN if [ ${INSTALL_MCRYPT} = true ]; then \
+    apt-get -y install libmcrypt-dev \
+    && docker-php-ext-install mcrypt \
+;fi
+# ]]
+
+ARG INSTALL_XSL=false
+# Install: xsl extension [[
+RUN if [ ${INSTALL_XSL} = true ]; then \
+    apt-get -y install libxslt1-dev \
+    && docker-php-ext-install xsl \
+;fi
+# ]]
+
+ARG INSTALL_INTL=false
+# Install: intl extension [[
+RUN if [ ${INSTALL_INTL} = true ]; then \
+    apt-get -y install libicu-dev \
+    && docker-php-ext-install intl \
+;fi
+# ]]
+
+ARG INSTALL_GD=false
+# Install: gd extension [[
+RUN if [ ${INSTALL_GD} = true ]; then \
+    apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng12-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype-dir=/usr/include/ \
+        --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd \
+;fi
+# ]]
+
+ARG INSTALL_SOAP=false
+# Install: soap extension [[
+RUN if [ ${INSTALL_SOAP} = true ]; then \
+    apt-get -y install libxml2-dev \
+    && docker-php-ext-install soap \
+;fi
+# ]]
+
+ARG INSTALL_ZIP_ARCHIVE=false
+# Install: zip extension [[
+RUN if [ ${INSTALL_ZIP_ARCHIVE} = true  ]; then \
+    apt-get -y install zlib1g-dev \
+    && docker-php-ext-install zip \
+;fi
+# ]]
+
+ARG INSTALL_MEMCACHED=false
+# Install: memcached extension [[
+RUN if [ ${INSTALL_MEMCACHED} = true ]; then \
+    apt-get -y install libmemcached-dev \
+    && pecl install memcached \
+    && docker-php-ext-enable memcached \
+;fi
+# ]]
+
+ARG INSTALL_MONGO=false
+# Install: mongodb extension [[
+RUN if [ ${INSTALL_MONGO} = true ]; then \
+    apt-get install -y libssl-dev \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+;fi
+# ]]
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 4. Install Xdebug [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_XDEBUG=false
+ARG XDEBUG_VERSION=2.5.0
+
+RUN if [ ${INSTALL_XDEBUG} = true ]; then \
+    curl -LOk http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \
+    && tar -zxvf xdebug-$XDEBUG_VERSION.tgz && cd xdebug-$XDEBUG_VERSION \
+    && phpize && ./configure --enable-xdebug && make && make install \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 5. Composer [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_COMPOSER=false
+
+RUN if [ ${INSTALL_COMPOSER} = true ]; then \
+    curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
+    && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer \
+    && rm -rf /tmp/composer-setup.php \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 6. Magerun [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_MAGERUN=false
+
+RUN if [ ${INSTALL_MAGERUN} = true ]; then \
+    curl -o magerun https://raw.githubusercontent.com/netz98/n98-magerun/master/n98-magerun.phar \
+    && chmod +x ./magerun \
+    && mv ./magerun /usr/local/bin/ \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 7. Magerun 2 [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_MAGERUN_2=false
+
+RUN if [ ${INSTALL_MAGERUN_2} = true ]; then \
+    curl -o magerun2 https://files.magerun.net/n98-magerun2.phar \
+    && chmod +x ./magerun2 \
+    && mv ./magerun2 /usr/local/bin/ \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 8. Nodejs & node tools [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_NODE=false
+
+RUN if [ ${INSTALL_NODE} = true ]; then \
+    # Install nodejs
+    curl -sL https://deb.nodesource.com/setup_7.x | bash - \
+    && apt-get install -y nodejs \
+
+    # Install grunt
+    && npm install -g grunt-cli \
+
+    # Install browser-sync
+    && npm install -g browser-sync \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 9. Configure [[
+# ------------------------------------------------------------------------------
+
+COPY config/php.ini /usr/local/etc/php/php.ini
+COPY config/ssmtp.conf /etc/ssmtp/ssmtp.conf
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> 10. Users [[
+# ------------------------------------------------------------------------------
+
+# Add & change user uid
+RUN useradd --shell /bin/bash -u 1024 -o -c "" -m devbox
+RUN usermod -u 1000 devbox
+
+USER devbox
+
+# ]]
+# ------------------------------------------------------------------------------
