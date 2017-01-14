@@ -1,15 +1,17 @@
 # vim: set foldmarker=[[,]] foldlevel=0 foldmethod=marker spell:
 # ------------------------------------------------------------------------------
-# -> 1. Base image [[
+# -> Base image [[
 # ------------------------------------------------------------------------------
 
 FROM nginx:alpine
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> 2. Configure [[
+# -> Configure [[
 # ------------------------------------------------------------------------------
 
+
+COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY ssl /etc/nginx/ssl
 COPY sites /etc/nginx/conf.d
 
