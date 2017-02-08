@@ -21,6 +21,7 @@ services:
         - INSTALL_MAGERUN=false
         - INSTALL_MAGERUN_2=false
         - INSTALL_NODE=false
+        - INSTALL_SQLITE=false
         - PHP_INSTALL_MCRYPT=false
         - PHP_INSTALL_XSL=false
         - PHP_INSTALL_INTL=false
@@ -33,6 +34,7 @@ services:
     container_name: php-5.6
     links:
       - mysql
+      # - postgres
       # - mongo
       # - mongoclient
       # - redis
@@ -71,6 +73,22 @@ services:
       MYSQL_ROOT_PASSWORD: 123
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: devbox
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Postgres [[
+# ------------------------------------------------------------------------------
+
+  # postgres:
+  #   image: postgres:9.6.1-alpine
+  #   container_name: postgres
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: dbuser
+  #     POSTGRES_PASSWORD: 123
+  #     POSTGRES_DB: devbox
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -93,6 +111,8 @@ services:
   #   container_name: mongoclient
   #   ports:
   #     - 3000:3000
+  #   environment:
+  #     MONGO_URL: mongodb://mongo:27017
 
 # ]]
 # ------------------------------------------------------------------------------
