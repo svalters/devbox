@@ -132,6 +132,20 @@ RUN if [ ${INSTALL_COMPOSER} = true ]; then \
 
 # ]]
 # ------------------------------------------------------------------------------
+# -> PHPunit [[
+# ------------------------------------------------------------------------------
+
+ARG INSTALL_PHPUNIT=false
+ARG PHPUNIT_VERSION=5.7
+
+RUN if [ ${INSTALL_PHPUNIT} = true ]; then \
+    curl -L -o phpunit https://phar.phpunit.de/phpunit-$PHPUNIT_VERSION.phar \
+    && chmod +x ./phpunit \
+    && mv ./phpunit /usr/local/bin/ \
+;fi
+
+# ]]
+# ------------------------------------------------------------------------------
 # -> Magerun [[
 # ------------------------------------------------------------------------------
 
