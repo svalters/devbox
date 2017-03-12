@@ -203,8 +203,12 @@ RUN if [ ${INSTALL_SQLITE} = true ]; then \
 # -> Configure [[
 # ------------------------------------------------------------------------------
 
+# Set up config files
 COPY config/php.ini /usr/local/etc/php/php.ini
 COPY config/ssmtp.conf /etc/ssmtp/ssmtp.conf
+
+# Change working directory
+WORKDIR /var/www/project
 
 # ]]
 # ------------------------------------------------------------------------------
