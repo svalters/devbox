@@ -3,7 +3,7 @@
 # -> Base image [[
 # ------------------------------------------------------------------------------
 
-FROM php:5.6-fpm
+FROM php:fpm
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -24,7 +24,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install \
     mysqli \
-    mysql \
     opcache \
     mbstring \
     tokenizer \
@@ -109,7 +108,7 @@ RUN if [ ${PHP_INSTALL_MONGO} = true ]; then \
 # ------------------------------------------------------------------------------
 
 ARG INSTALL_XDEBUG=false
-ARG XDEBUG_VERSION=2.5.0
+ARG XDEBUG_VERSION=2.5.1
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     curl -LOk http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \
@@ -136,7 +135,7 @@ RUN if [ ${INSTALL_COMPOSER} = true ]; then \
 # ------------------------------------------------------------------------------
 
 ARG INSTALL_PHPUNIT=false
-ARG PHPUNIT_VERSION=5.7
+ARG PHPUNIT_VERSION=6.0
 
 RUN if [ ${INSTALL_PHPUNIT} = true ]; then \
     curl -L -o phpunit https://phar.phpunit.de/phpunit-$PHPUNIT_VERSION.phar \
@@ -168,22 +167,6 @@ RUN if [ ${INSTALL_MAGERUN_2} = true ]; then \
     curl -o magerun2 https://files.magerun.net/n98-magerun2.phar \
     && chmod +x ./magerun2 \
     && mv ./magerun2 /usr/local/bin/ \
-;fi
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> Nodejs & node tools [[
-# ------------------------------------------------------------------------------
-
-ARG INSTALL_NODE=false
-
-RUN if [ ${INSTALL_NODE} = true ]; then \
-    # Install nodejs
-    curl -sL https://deb.nodesource.com/setup_7.x | bash - \
-    && apt-get install -y nodejs \
-
-    # Install browser-sync
-    && npm install -g browser-sync \
 ;fi
 
 # ]]

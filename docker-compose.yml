@@ -21,7 +21,6 @@ services:
         - INSTALL_PHPUNIT=false
         - INSTALL_MAGERUN=false
         - INSTALL_MAGERUN_2=false
-        - INSTALL_NODE=false
         - INSTALL_SQLITE=false
         - PHP_INSTALL_MCRYPT=false
         - PHP_INSTALL_XSL=false
@@ -31,8 +30,8 @@ services:
         - PHP_INSTALL_ZIP_ARCHIVE=false
         - PHP_INSTALL_MEMCACHED=false
         - PHP_INSTALL_MONGO=false
-      dockerfile: Dockerfile-56
-    container_name: php-5.6
+      dockerfile: Dockerfile
+    container_name: php
     links:
       - mysql
       # - postgres
