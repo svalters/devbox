@@ -36,7 +36,6 @@ services:
       - mysql
       # - postgres
       # - mongo
-      # - mongoclient
       # - redis
       # - memcached
       # - mailhog
@@ -100,19 +99,6 @@ services:
   #   container_name: mongo
   #   ports:
   #     - 27017:27017
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> Mongo-client [[
-# ------------------------------------------------------------------------------
-
-  # mongoclient:
-  #   image: mongoclient/mongoclient
-  #   container_name: mongoclient
-  #   ports:
-  #     - 3000:3000
-  #   environment:
-  #     MONGO_URL: mongodb://mongo:27017
 
 # ]]
 # ------------------------------------------------------------------------------
