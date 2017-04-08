@@ -13,8 +13,50 @@ services:
 # ------------------------------------------------------------------------------
 
   web:
+    build:
+      args:
+        - INSTALL_SQLITE=false
+      dockerfile: Dockerfile
     volumes:
       - ./project:/var/www/project
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> PHP-FPM [[
+# ------------------------------------------------------------------------------
+
+  php-fpm:
+    build:
+      context: ./image/php
+      args:
+        - INSTALL_XDEBUG=false
+        - INSTALL_COMPOSER=false
+        - INSTALL_PHPUNIT=false
+        - INSTALL_MAGERUN=false
+        - INSTALL_MAGERUN_2=false
+        - PHP_INSTALL_MCRYPT=false
+        - PHP_INSTALL_XSL=false
+        - PHP_INSTALL_INTL=false
+        - PHP_INSTALL_GD=false
+        - PHP_INSTALL_SOAP=false
+        - PHP_INSTALL_ZIP_ARCHIVE=false
+        - PHP_INSTALL_MEMCACHED=false
+        - PHP_INSTALL_MONGO=false
+    container_name: php
+    extends:
+        service: web
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Python [[
+# ------------------------------------------------------------------------------
+#
+  python:
+    build:
+      context: ./image/python
+    container_name: python
+    extends:
+        service: web
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -22,7 +64,12 @@ services:
 # ------------------------------------------------------------------------------
 
   nginx:
-    build: ./image/nginx
+    build:
+      context: ./image/nginx
+      args:
+        - ENABLE_PHP=true
+        - ENABLE_PYTHON=false
+      dockerfile: Dockerfile
     container_name: nginx
     ports:
       - 80:80
