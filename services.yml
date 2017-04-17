@@ -13,10 +13,6 @@ services:
 # ------------------------------------------------------------------------------
 
   web:
-    build:
-      args:
-        - INSTALL_SQLITE=false
-      dockerfile: Dockerfile
     volumes:
       - ./project:/var/www/project
 
@@ -34,6 +30,7 @@ services:
         - INSTALL_PHPUNIT=false
         - INSTALL_MAGERUN=false
         - INSTALL_MAGERUN_2=false
+        - INSTALL_SQLITE=false
         - PHP_INSTALL_MCRYPT=false
         - PHP_INSTALL_XSL=false
         - PHP_INSTALL_INTL=false
