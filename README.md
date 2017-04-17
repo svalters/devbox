@@ -1,2 +1,2 @@
 # devbox
-Dockerized PHP development stack
+Dockerized PHP & Python development stack

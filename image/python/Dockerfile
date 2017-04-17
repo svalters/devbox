@@ -19,25 +19,12 @@ RUN apt-get update && apt-get install -y \
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> SQLite [[
-# ------------------------------------------------------------------------------
-
-ARG INSTALL_SQLITE=false
-
-RUN if [ ${INSTALL_SQLITE} = true ]; then \
-    apt-get update && apt-get install -y \
-        sqlite \
-;fi
-
-# ]]
-# ------------------------------------------------------------------------------
 # -> Install Python packages [[
 # ------------------------------------------------------------------------------
 
 RUN pip install \
     uwsgi \
     virtualenv \
-    virtualenvwrapper \
     autoenv
 
 # ]]

@@ -16,25 +16,28 @@ services:
     build:
       context: ./image/php
       args:
-        - INSTALL_XDEBUG=false
-        - INSTALL_COMPOSER=false
-        - INSTALL_PHPUNIT=false
-        - INSTALL_MAGERUN=false
-        - INSTALL_MAGERUN_2=false
-        - INSTALL_SQLITE=false
-        - PHP_INSTALL_MCRYPT=false
-        - PHP_INSTALL_XSL=false
-        - PHP_INSTALL_INTL=false
-        - PHP_INSTALL_GD=false
-        - PHP_INSTALL_SOAP=false
-        - PHP_INSTALL_ZIP_ARCHIVE=false
-        - PHP_INSTALL_MEMCACHED=false
-        - PHP_INSTALL_MONGO=false
-      dockerfile: Dockerfile
-    container_name: php
+        - INSTALL_XDEBUG=true
+        - INSTALL_COMPOSER=true
+        - INSTALL_PHPUNIT=true
+        - INSTALL_SQLITE=true
+        - PHP_INSTALL_MCRYPT=true
+        - PHP_INSTALL_XSL=true
+        - PHP_INSTALL_INTL=true
+        - PHP_INSTALL_GD=true
+        - PHP_INSTALL_SOAP=true
     extends:
-        file: common.yml
-        service: web
+        file: services.yml
+        service: php-fpm
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Python [[
+# ------------------------------------------------------------------------------
+
+  # python:
+  #   extends:
+  #       file: services.yml
+  #       service: python
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -42,13 +45,19 @@ services:
 # ------------------------------------------------------------------------------
 
   nginx:
+    build:
+      args:
+        - ENABLE_PHP=true
+        - ENABLE_PYTHON=false
     extends:
-        file: common.yml
+        file: services.yml
         service: nginx
     volumes_from:
       - php-fpm
+      # - python
     links:
       - php-fpm
+      # - python
 
 # ]]
 # ------------------------------------------------------------------------------
