@@ -57,9 +57,7 @@ services:
     container_name: python
     extends:
         service: web
-    expose:
-        - 8001
-    command: uwsgi --emperor /etc/uwsgi
+    command: uwsgi --enable-threads --emperor /etc/uwsgi/vassals --vassals-include /etc/uwsgi/default.ini
 
 # ]]
 # ------------------------------------------------------------------------------

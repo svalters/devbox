@@ -42,6 +42,17 @@ RUN pip install \
 
 # ]]
 # ------------------------------------------------------------------------------
+# -> Configure [[
+# ------------------------------------------------------------------------------
+
+# Set up uwsgi config list
+COPY uwsgi /etc/uwsgi
+
+# Change working directory
+WORKDIR /var/www/project
+
+# ]]
+# ------------------------------------------------------------------------------
 # -> Users [[
 # ------------------------------------------------------------------------------
 
@@ -53,11 +64,11 @@ USER devbox
 
 # ]]
 # ------------------------------------------------------------------------------
-# -> Configure [[
+# -> Environments [[
 # ------------------------------------------------------------------------------
 
-# Set up uwsgi config list
-COPY uwsgi /etc/uwsgi/
+# Create tmp dir
+RUN mkdir ~/tmp
 
 # Set up autoenv
 RUN echo 'source `which activate.sh`' >> ~/.bashrc
@@ -65,9 +76,6 @@ RUN echo 'source `which activate.sh`' >> ~/.bashrc
 # Set up virtual env wrapper
 RUN echo 'export WORKON_HOME=$HOME/.virtualenvs' >> ~/.bashrc
 RUN echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
-
-# Change working directory
-WORKDIR /var/www/project
 
 # ]]
 # ------------------------------------------------------------------------------
