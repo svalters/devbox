@@ -62,7 +62,6 @@ RUN echo 'source `which activate.sh`' >> ~/.bashrc
 
 # Set up virtual env wrapper
 RUN echo 'export WORKON_HOME=$HOME/.virtualenvs' >> ~/.bashrc
-RUN echo 'source /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
 
 # ]]
 # ------------------------------------------------------------------------------
