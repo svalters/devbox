@@ -65,9 +65,6 @@ services:
   nginx:
     build:
       context: ./image/nginx
-      args:
-        - ENABLE_PHP=true
-        - ENABLE_PYTHON=false
       dockerfile: Dockerfile
     container_name: nginx
     ports:

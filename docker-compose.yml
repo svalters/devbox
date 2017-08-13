@@ -45,10 +45,6 @@ services:
 # ------------------------------------------------------------------------------
 
   nginx:
-    build:
-      args:
-        - ENABLE_PHP=true
-        - ENABLE_PYTHON=false
     extends:
         file: services.yml
         service: nginx
