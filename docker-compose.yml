@@ -25,6 +25,7 @@ services:
         - PHP_INSTALL_INTL=true
         - PHP_INSTALL_GD=true
         - PHP_INSTALL_SOAP=true
+        - PHP_INSTALL_ZIP_ARCHIVE=true
     extends:
         file: services.yml
         service: php-fpm
