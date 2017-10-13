@@ -39,6 +39,7 @@ services:
         - PHP_INSTALL_ZIP_ARCHIVE=false
         - PHP_INSTALL_MEMCACHED=false
         - PHP_INSTALL_MONGO=false
+        - PHP_INSTALL_REDIS=false
       dockerfile: Dockerfile
     container_name: php
     extends:

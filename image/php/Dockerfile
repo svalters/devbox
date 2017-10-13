@@ -102,6 +102,14 @@ RUN if [ ${PHP_INSTALL_MONGO} = true ]; then \
 ;fi
 # ]]
 
+ARG PHP_INSTALL_REDIS=false
+# Install: mongodb extension [[
+RUN if [ ${PHP_INSTALL_REDIS} = true ]; then \
+    pecl install redis-3.1.4 \
+    && docker-php-ext-enable redis \
+;fi
+# ]]
+
 # ]]
 # ------------------------------------------------------------------------------
 # -> Install Xdebug [[
