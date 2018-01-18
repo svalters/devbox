@@ -24,8 +24,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install \
     uwsgi \
-    virtualenv \
-    autoenv
+    pipenv
 
 # ]]
 # ------------------------------------------------------------------------------
@@ -57,11 +56,8 @@ USER devbox
 # Create tmp dir
 RUN mkdir ~/tmp
 
-# Set up autoenv
-RUN echo 'source `which activate.sh`' >> ~/.bashrc
-
-# Set up virtual env wrapper
-RUN echo 'export WORKON_HOME=$HOME/.virtualenvs' >> ~/.bashrc
+# Pipenv settings
+RUN echo 'export PIPENV_VENV_IN_PROJECT=1' >> ~/.bashrc
 
 # ]]
 # ------------------------------------------------------------------------------
