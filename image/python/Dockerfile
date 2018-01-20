@@ -57,6 +57,7 @@ USER devbox
 RUN mkdir ~/tmp
 
 # Pipenv settings
+RUN echo 'export SHELL=/bin/bash' >> ~/.bashrc
 RUN echo 'export PIPENV_VENV_IN_PROJECT=1' >> ~/.bashrc
 
 # ]]
