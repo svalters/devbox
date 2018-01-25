@@ -28,15 +28,8 @@ RUN docker-php-ext-install \
     mbstring \
     tokenizer \
     bcmath \
-    pdo_mysql
-
-ARG PHP_INSTALL_MCRYPT=false
-# Install: mcrypt extension [[
-RUN if [ ${PHP_INSTALL_MCRYPT} = true ]; then \
-    apt-get -y install libmcrypt-dev \
-    && docker-php-ext-install mcrypt \
-;fi
-# ]]
+    pdo_mysql \
+    exif
 
 ARG PHP_INSTALL_XSL=false
 # Install: xsl extension [[
@@ -60,7 +53,7 @@ RUN if [ ${PHP_INSTALL_GD} = true ]; then \
     apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng12-dev \
+        libpng-dev \
     && docker-php-ext-configure gd \
         --with-freetype-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \
@@ -116,7 +109,7 @@ RUN if [ ${PHP_INSTALL_REDIS} = true ]; then \
 # ------------------------------------------------------------------------------
 
 ARG INSTALL_XDEBUG=false
-ARG XDEBUG_VERSION=2.5.1
+ARG XDEBUG_VERSION=2.6.0RC2
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     curl -LOk http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz \

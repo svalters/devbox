@@ -31,7 +31,6 @@ services:
         - INSTALL_MAGERUN=false
         - INSTALL_MAGERUN_2=false
         - INSTALL_SQLITE=false
-        - PHP_INSTALL_MCRYPT=false
         - PHP_INSTALL_XSL=false
         - PHP_INSTALL_INTL=false
         - PHP_INSTALL_GD=false
