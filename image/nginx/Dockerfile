@@ -7,11 +7,29 @@ FROM nginx:alpine
 
 # ]]
 # ------------------------------------------------------------------------------
+# -> Install base packages [[
+# ------------------------------------------------------------------------------
+
+RUN apk update && apk add \
+    openssl
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Generate self signed key [[
+# ------------------------------------------------------------------------------
+
+RUN mkdir /etc/nginx/ssl
+RUN openssl req -batch -x509 -nodes -days 365 -newkey rsa:2048 \
+    -subj '/CN=devbox' \
+    -keyout /etc/nginx/ssl/nginx.key \
+    -out /etc/nginx/ssl/nginx.crt
+
+# ]]
+# ------------------------------------------------------------------------------
 # -> Configure [[
 # ------------------------------------------------------------------------------
 
 COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY ssl /etc/nginx/ssl
 
 # Create & copy all available site list
 COPY sites /etc/nginx/conf.d

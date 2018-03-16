@@ -3,58 +3,61 @@
 # -> Init [[
 # ------------------------------------------------------------------------------
 
-version: '2.1'
+version: '3'
 
 services:
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> PHP-FPM [[
-# ------------------------------------------------------------------------------
-
-  php-fpm:
-    build:
-      context: ./image/php
-      args:
-        - INSTALL_XDEBUG=true
-        - INSTALL_COMPOSER=true
-        - INSTALL_PHPUNIT=true
-        - INSTALL_SQLITE=true
-        - PHP_INSTALL_MCRYPT=true
-        - PHP_INSTALL_XSL=true
-        - PHP_INSTALL_INTL=true
-        - PHP_INSTALL_GD=true
-        - PHP_INSTALL_SOAP=true
-        - PHP_INSTALL_ZIP_ARCHIVE=true
-    extends:
-        file: services.yml
-        service: php-fpm
-
-# ]]
-# ------------------------------------------------------------------------------
-# -> Python [[
-# ------------------------------------------------------------------------------
-
-  # python:
-  #   extends:
-  #       file: services.yml
-  #       service: python
 
 # ]]
 # ------------------------------------------------------------------------------
 # -> Nginx [[
 # ------------------------------------------------------------------------------
 
-  nginx:
-    extends:
-        file: services.yml
-        service: nginx
-    volumes_from:
-      - php-fpm
-      # - python
-    links:
-      - php-fpm
-      # - python
+    nginx:
+        container_name: nginx
+        build: ./image/nginx
+        volumes:
+            - ./project:/var/www/project
+        ports:
+            - 80:80
+            - 443:443 
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> PHP-FPM [[
+# ------------------------------------------------------------------------------
+
+    php:
+        container_name: php
+        build: ./image/php
+        volumes:
+            - ./project:/var/www/project
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Mariadb [[
+# ------------------------------------------------------------------------------
+
+    mariadb:
+        container_name: mariadb
+        image: mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_PASSWORD: root
+            MYSQL_USER: root
+            MYSQL_DATABASE: devbox
+        ports:
+            - 3306:3306
+
+# ]]
+# ------------------------------------------------------------------------------
+# -> Maildev [[
+# ------------------------------------------------------------------------------
+
+    maildev:
+        container_name: maildev
+        image: djfarrelly/maildev
+        ports:
+            - 8025:80
 
 # ]]
 # ------------------------------------------------------------------------------
