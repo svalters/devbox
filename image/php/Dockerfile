@@ -16,7 +16,6 @@ RUN apk update && apk add \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
-    gcc \
     g++ \
     make \
     autoconf \
@@ -37,8 +36,6 @@ RUN docker-php-ext-configure gd \
     --with-jpeg-dir=/usr/include/
 
 RUN docker-php-ext-install \
-    mysqli \
-    opcache \
     mbstring \
     tokenizer \
     bcmath \
